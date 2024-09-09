@@ -8,6 +8,6 @@ public class Producto{
 	private String MARCA;
 	private double PRECIO_UNITARIO;
 
-	public void GenerarReporteDeProducto();
+	public void GenerarReporteDeProducto(){}
 
 }

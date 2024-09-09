@@ -12,6 +12,6 @@ public class Paquete{
     private ArrayList<Producto> PRODUCTOS;
     private LineaTransaccionCompra linea_transaccion_compra;
     private LineaTransaccionVenta linea_transaccion_venta; 
-    public void GenerarReporteDePaquete();
+    public void GenerarReporteDePaquete(){}
 }
 

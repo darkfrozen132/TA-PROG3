@@ -12,5 +12,5 @@ public class Torre{
 	private ArrayList<Paquete> PAQUETES;
 
 
-	public void GenerarReporteDeTorre();
+	public void GenerarReporteDeTorre(){}
 }
