@@ -71,7 +71,54 @@ public abstract class DAOImpl {
         return resultado;
 
     }
+    
+    public Integer modificar(String condicionWhere) {
+        Integer resultado = 0;
+        try {
+            this.iniciarTransaccion();
+            String sql = this.generarSQLParaModificacion(condicionWhere);
+            resultado = this.ejecutarModificacionesEnBD(sql);
+            this.comitarTransaccion();
+        } catch (SQLException ex) {
+            try {
+                this.rollbackTransaccion();
+            } catch (SQLException ex1) {
+                Logger.getLogger(DAOImpl.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                this.cerrarConexion();
+            } catch (SQLException ex) {
+                Logger.getLogger(DAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return resultado;
+    }
 
+    // Método para eliminar un registro en la BD
+    public Integer eliminar(String condicionWhere) {
+        Integer resultado = 0;
+        try {
+            this.iniciarTransaccion();
+            String sql = this.generarSQLParaEliminacion(condicionWhere);
+            resultado = this.ejecutarModificacionesEnBD(sql);
+            this.comitarTransaccion();
+        } catch (SQLException ex) {
+            try {
+                this.rollbackTransaccion();
+            } catch (SQLException ex1) {
+                Logger.getLogger(DAOImpl.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                this.cerrarConexion();
+            } catch (SQLException ex) {
+                Logger.getLogger(DAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return resultado;
+    }
+    
     private String generarSQLParaInsercion() {
         String sql = "insert into " + this.nombre_tabla;
         sql = sql.concat(" (");
@@ -81,8 +128,25 @@ public abstract class DAOImpl {
         sql = sql.concat(")");
         return sql;
     }
+    
+    private String generarSQLParaModificacion(String condicionWhere) {
+        String sql = "UPDATE " + this.nombre_tabla;
+        sql = sql.concat(" SET ");
+        sql = sql.concat(this.obtenerListaDeAtributosYValoresParaUpdate());
+        sql = sql.concat(" WHERE ");
+        sql = sql.concat(condicionWhere);
+        return sql;
+    }
 
+    private String generarSQLParaEliminacion(String condicionWhere) {
+        String sql = "DELETE FROM " + this.nombre_tabla;
+        sql = sql.concat(" WHERE ");
+        sql = sql.concat(condicionWhere);
+        return sql;
+    }
+    
+    
     protected abstract String obtenerListaDeAtributosParaInsert();
-
     protected abstract String obtenerListaDeValoresParaInsert();
+    protected abstract String obtenerListaDeAtributosYValoresParaUpdate();
 }
